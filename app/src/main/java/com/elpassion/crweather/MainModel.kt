@@ -1,12 +1,15 @@
 package com.elpassion.crweather
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.channels.actor
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.actor
 
+@ObsoleteCoroutinesApi
 class MainModel : ViewModel() {
 
     private val cache = HashMap<String, List<Chart>>(10)
@@ -21,7 +24,7 @@ class MainModel : ViewModel() {
     val loading: LiveData<Boolean> = mutableLoading
     val message: LiveData<String> = mutableMessage
 
-    private val actor = actor<Action>(UI, Channel.CONFLATED) {
+    private val actor = GlobalScope.actor<Action>(Dispatchers.Main, Channel.CONFLATED) {
         for (action in this) when (action) {
             is SelectCity -> {
                 mutableCity.value = action.city

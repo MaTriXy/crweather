@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 object OpenWeatherMapApi {
 
-    const val URL = "http://api.openweathermap.org"
+    private const val URL = "https://api.openweathermap.org"
 
     class Clouds {
         /** Cloudiness, % */
@@ -202,6 +202,6 @@ object OpenWeatherMapApi {
             .baseUrl(URL)
             .addConverterFactory(MoshiConverterFactory.create()).build()
 
-    val service = retrofit.create(Service::class.java)!!
+    val service = retrofit.create(Service::class.java)
 }
 

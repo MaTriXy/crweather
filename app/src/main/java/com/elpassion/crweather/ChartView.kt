@@ -2,12 +2,13 @@ package com.elpassion.crweather
 
 import android.content.Context
 import android.util.AttributeSet
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.channels.actor
-import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.actor
 
 
+@ObsoleteCoroutinesApi
+@ExperimentalCoroutinesApi
 class ChartView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
@@ -21,7 +22,7 @@ class ChartView @JvmOverloads constructor(
             actor.offer(value)
         }
 
-    private val actor = actor<Chart>(UI, Channel.CONFLATED) {
+    private val actor = GlobalScope.actor<Chart>(Dispatchers.Main, Channel.CONFLATED) {
 
         var currentChart = chart.deepCopy()
         var currentVelocities = chart.deepCopy().resetPoints()
